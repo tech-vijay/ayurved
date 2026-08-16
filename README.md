@@ -3,6 +3,9 @@
 
 A high-performance, full-featured web application built for an Ayurvedic healthcare center and online medicine store located in Sikriganj, Gorakhpur.
 
+**Project Live Link:** (https://jaibharat-buddha-ayurved.vercel.app/)
+
+
 ---
 
 ## ✨ Key Features
