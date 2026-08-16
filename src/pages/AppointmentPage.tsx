@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Calendar, CheckCircle, Clock, User, Phone, Mail, MapPin, Heart } from 'lucide-react';
+import { useState, useEffect, FormEvent } from 'react';
+import { Calendar, CheckCircle, Clock, User, Phone, MapPin, Heart } from 'lucide-react';
+import { WhatsAppIcon } from '@/components/WhatsAppIcon';
 import { supabase } from '@/lib/supabase';
 import { useUserAuth } from '@/context/UserAuthContext';
 import { showToast } from '@/components/Toast';
@@ -122,10 +123,10 @@ export default function AppointmentPage() {
               </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-emerald-600 space-y-2 text-sm">
-              <p className="flex items-center gap-2"><Phone className="w-4 h-4" /> +91 98765 43210</p>
-              <p className="flex items-center gap-2"><Mail className="w-4 h-4" /> info@jbvaishdik.in</p>
-              <p className="flex items-center gap-2"><MapPin className="w-4 h-4" /> मुख्य बाजार, बुद्ध चौक, भारत</p>
+            <div className="mt-8 pt-6 border-t border-emerald-600 space-y-2.5 text-sm">
+              <p className="flex items-center gap-2"><Phone className="w-4 h-4 text-emerald-300" /> <a href="tel:9005937956" className="hover:underline">+91 9005937956</a></p>
+              <p className="flex items-center gap-2"><WhatsAppIcon className="w-4 h-4 text-[#25D366]" /> <a href="https://wa.me/917317651331" target="_blank" rel="noreferrer" className="hover:underline">WhatsApp: 7317651331</a></p>
+              <p className="flex items-center gap-2"><MapPin className="w-4 h-4 text-emerald-300" /> <span>सिकरीगंज, गोरखपुर</span></p>
             </div>
           </div>
         </div>

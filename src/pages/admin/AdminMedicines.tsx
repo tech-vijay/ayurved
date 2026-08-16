@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import type { Medicine, Category } from '@/lib/types';
 import { formatPrice } from '@/lib/format';
 import { showToast } from '@/components/Toast';
+import ImageKitUpload from '@/components/ImageKitUpload';
 
 const emptyForm = {
   name: '', name_hi: '', description: '', benefits: '', ingredients: '', dosage: '',
@@ -214,10 +215,13 @@ export default function AdminMedicines() {
                     {categories.map(c => <option key={c.id} value={c.id}>{c.name_hi}</option>)}
                   </select>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">छवि URL</label>
-                  <input value={form.image_url} onChange={e => setForm({ ...form, image_url: e.target.value })} placeholder="https://..."
-                    className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm" />
+                <div className="sm:col-span-2">
+                  <ImageKitUpload
+                    value={form.image_url}
+                    onChange={(url) => setForm({ ...form, image_url: url })}
+                    folder="/ayurved/medicines"
+                    label="औषधि की छवि (ImageKit CDN Upload)"
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">कीमत (₹) *</label>

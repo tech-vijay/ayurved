@@ -1,11 +1,12 @@
 import { useState, FormEvent } from 'react';
-import { Lock, Mail, Leaf, ArrowRight } from 'lucide-react';
+import { Lock, Mail, ArrowRight, AlertCircle, LogOut } from 'lucide-react';
 import { useAdminAuth } from '@/context/AdminAuthContext';
 import { navigate } from '@/lib/router';
 import { showToast } from '@/components/Toast';
+import logoImg from '@/images/logo.png';
 
 export default function AdminLoginPage() {
-  const { signIn } = useAdminAuth();
+  const { signIn, signOut, session, isAdmin } = useAdminAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -16,23 +17,59 @@ export default function AdminLoginPage() {
     const { error } = await signIn(email, password);
     setLoading(false);
     if (error) {
-      showToast('गलत ईमेल या पासवर्ड', 'error');
+      if (error.toLowerCase().includes('email not confirmed')) {
+        showToast('ईमेल की पुष्टि नहीं हुई है! कृपया अपना ईमेल इनबॉक्स चेक करें और कन्फर्मेशन लिंक पर क्लिक करें।', 'error');
+      } else if (error.toLowerCase().includes('invalid login credentials')) {
+        showToast('गलत ईमेल या पासवर्ड', 'error');
+      } else {
+        showToast(error, 'error');
+      }
     } else {
       showToast('व्यवस्थापक लॉगिन सफल', 'success');
       navigate('/admin/dashboard');
     }
   };
 
+  const handleSignOut = async () => {
+    await signOut();
+    showToast('लॉगआउट हो गया', 'info');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center mx-auto mb-4 shadow-lg">
-            <Leaf className="w-8 h-8 text-white" />
+          <div
+            onClick={() => navigate('/')}
+            className="bg-white p-3 rounded-2xl shadow-md border border-gray-100 inline-block mb-3 cursor-pointer transition-transform hover:scale-105"
+          >
+            <img
+              src={logoImg}
+              alt="जय भारत बुद्ध वैदिकी"
+              className="h-14 md:h-16 w-auto object-contain"
+            />
           </div>
           <h1 className="text-2xl font-bold text-emerald-900">व्यवस्थापक लॉगिन</h1>
           <p className="text-gray-500 text-sm mt-1">जय भारत बुद्ध वैदिकी प्रबंधन</p>
         </div>
+
+        {session && !isAdmin && (
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6 text-amber-800 text-sm flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="font-semibold">आपके पास एडमिन अधिकार नहीं हैं</p>
+              <p className="text-xs text-amber-700 mt-1">
+                वर्तमान उपयोगकर्ता ({session.user.email}) एडमिन के रूप में अधिकृत नहीं है। एडमिन खाते से प्रवेश करें।
+              </p>
+              <button
+                onClick={handleSignOut}
+                className="mt-3 flex items-center gap-1.5 bg-amber-200 hover:bg-amber-300 text-amber-900 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors"
+              >
+                <LogOut className="w-3.5 h-3.5" /> लॉगआउट करें
+              </button>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-8 space-y-5">
           <div>

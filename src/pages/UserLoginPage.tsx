@@ -1,8 +1,9 @@
 import { useState, FormEvent } from 'react';
-import { Lock, Mail, Leaf, ArrowRight, User as UserIcon } from 'lucide-react';
+import { Lock, Mail, ArrowRight, User as UserIcon } from 'lucide-react';
 import { useUserAuth } from '@/context/UserAuthContext';
 import { navigate } from '@/lib/router';
 import { showToast } from '@/components/Toast';
+import logoImg from '@/images/logo.png';
 
 export default function UserLoginPage() {
   const { signIn, signInWithGoogle } = useUserAuth();
@@ -16,7 +17,13 @@ export default function UserLoginPage() {
     const { error } = await signIn(email, password);
     setLoading(false);
     if (error) {
-      showToast('गलत ईमेल या पासवर्ड', 'error');
+      if (error.toLowerCase().includes('email not confirmed')) {
+        showToast('ईमेल की पुष्टि नहीं हुई है! कृपया अपना ईमेल इनबॉक्स चेक करें और कन्फर्मेशन लिंक पर क्लिक करें।', 'error');
+      } else if (error.toLowerCase().includes('invalid login credentials')) {
+        showToast('गलत ईमेल या पासवर्ड', 'error');
+      } else {
+        showToast(error, 'error');
+      }
     } else {
       showToast('लॉगिन सफल', 'success');
       navigate('/');
@@ -31,10 +38,12 @@ export default function UserLoginPage() {
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <button onClick={() => navigate('/')} className="inline-flex items-center gap-3 mb-4">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center shadow-lg">
-              <Leaf className="w-7 h-7 text-white" />
-            </div>
+          <button onClick={() => navigate('/')} className="inline-block bg-white p-3 rounded-2xl shadow-md border border-gray-100 mb-3 transition-transform hover:scale-105">
+            <img
+              src={logoImg}
+              alt="जय भारत बुद्ध वैदिकी"
+              className="h-14 md:h-16 w-auto object-contain"
+            />
           </button>
           <h1 className="text-2xl font-bold text-emerald-900">लॉगिन करें</h1>
           <p className="text-gray-500 text-sm mt-1">जय भारत बुद्ध वैदिकी में आपका स्वागत है</p>

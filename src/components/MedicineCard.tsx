@@ -4,6 +4,7 @@ import { useCart } from '@/context/CartContext';
 import { formatPrice } from '@/lib/format';
 import { navigate } from '@/lib/router';
 import { showToast } from '@/components/Toast';
+import { getImageKitUrl } from '@/lib/imagekit';
 
 export default function MedicineCard({ medicine }: { medicine: Medicine }) {
   const { addItem } = useCart();
@@ -30,7 +31,7 @@ export default function MedicineCard({ medicine }: { medicine: Medicine }) {
       <div className="relative aspect-square overflow-hidden bg-gray-50">
         {medicine.image_url ? (
           <img
-            src={medicine.image_url}
+            src={getImageKitUrl(medicine.image_url, { width: 400, height: 400, quality: 80 })}
             alt={medicine.name_hi}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             loading="lazy"

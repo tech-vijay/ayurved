@@ -16,7 +16,9 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const isAdmin = !!session?.user?.app_metadata?.role;
+  const userRole = session?.user?.app_metadata?.role || session?.user?.user_metadata?.role;
+  const userEmail = session?.user?.email ?? '';
+  const isAdmin = userRole === 'admin' || userEmail.endsWith('@jbvaishdik.in') || userEmail.startsWith('admin');
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -32,12 +34,17 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return { error: error?.message ?? null };
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      return { error: error.message };
+    }
+    setSession(data.session);
+    return { error: null };
   };
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    setSession(null);
   };
 
   return (

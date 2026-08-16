@@ -1,8 +1,9 @@
 import { useState, FormEvent } from 'react';
-import { Lock, Mail, Leaf, ArrowRight, User as UserIcon } from 'lucide-react';
+import { Lock, Mail, ArrowRight, User as UserIcon } from 'lucide-react';
 import { useUserAuth } from '@/context/UserAuthContext';
 import { navigate } from '@/lib/router';
 import { showToast } from '@/components/Toast';
+import logoImg from '@/images/logo.png';
 
 export default function UserSignupPage() {
   const { signUp, signInWithGoogle } = useUserAuth();
@@ -18,12 +19,18 @@ export default function UserSignupPage() {
       return;
     }
     setLoading(true);
-    const { error } = await signUp(email, password, name);
+    const res = await signUp(email, password, name);
     setLoading(false);
-    if (error) {
-      showToast(error.includes('already') ? 'यह ईमेल पहले से रजिस्टर्ड है' : 'साइनअप में त्रुटि', 'error');
+    if (res.error) {
+      const errMsg = res.error.toLowerCase().includes('already')
+        ? 'यह ईमेल पहले से रजिस्टर्ड है'
+        : res.error;
+      showToast(errMsg, 'error');
+    } else if (res.session) {
+      showToast('अकाउंट सफलतापूर्वक बन गया! आप लॉगिन हो चुके हैं', 'success');
+      navigate('/');
     } else {
-      showToast('अकाउंट बन गया! अब लॉगिन करें', 'success');
+      showToast('अकाउंट बन गया! यदि ईमेल वैरिफिकेशन ऑन है, तो कृपया अपनी ईमेल चेक करें या लॉगिन करें', 'success');
       navigate('/login');
     }
   };
@@ -36,10 +43,12 @@ export default function UserSignupPage() {
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <button onClick={() => navigate('/')} className="inline-flex items-center gap-3 mb-4">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center shadow-lg">
-              <Leaf className="w-7 h-7 text-white" />
-            </div>
+          <button onClick={() => navigate('/')} className="inline-block bg-white p-3 rounded-2xl shadow-md border border-gray-100 mb-3 transition-transform hover:scale-105">
+            <img
+              src={logoImg}
+              alt="जय भारत बुद्ध वैदिकी"
+              className="h-14 md:h-16 w-auto object-contain"
+            />
           </button>
           <h1 className="text-2xl font-bold text-emerald-900">नया अकाउंट बनाएं</h1>
           <p className="text-gray-500 text-sm mt-1">रजिस्टर करें और औषधियां मंगाएं</p>

@@ -1,4 +1,5 @@
-import { Phone, Mail, MapPin, Clock, Leaf } from 'lucide-react';
+import { Phone, MapPin, Clock, Leaf } from 'lucide-react';
+import { WhatsAppIcon } from '@/components/WhatsAppIcon';
 
 export default function ContactPage() {
   return (
@@ -10,18 +11,42 @@ export default function ContactPage() {
 
       <div className="grid md:grid-cols-3 gap-6 mb-10">
         {[
-          { icon: <Phone className="w-6 h-6" />, title: 'फोन', value: '+91 98765 43210', sub: 'सोम-शनि, 9 बजे - 8 बजे' },
-          { icon: <Mail className="w-6 h-6" />, title: 'ईमेल', value: 'info@jbvaishdik.in', sub: '24 घंटे में उत्तर' },
-          { icon: <MapPin className="w-6 h-6" />, title: 'पता', value: 'मुख्य बाजार, बुद्ध चौक', sub: 'भारत' },
+          {
+            icon: <Phone className="w-6 h-6 text-emerald-600" />,
+            title: 'फोन कॉल',
+            value: '+91 9005937956',
+            sub: 'सोम-शनि, 9 बजे - 8 बजे',
+            link: 'tel:9005937956'
+          },
+          {
+            icon: <WhatsAppIcon className="w-6 h-6 text-[#25D366]" />,
+            title: 'व्हाट्सएप चैट',
+            value: '+91 7317651331',
+            sub: 'तुरंत परामर्श एवं ऑर्डर सहायता',
+            link: 'https://wa.me/917317651331'
+          },
+          {
+            icon: <MapPin className="w-6 h-6" />,
+            title: 'हमारा पता',
+            value: 'सिकरीगंज, गोरखपुर',
+            sub: 'उत्तर प्रदेश, भारत',
+            link: '#'
+          },
         ].map((c, i) => (
-          <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
-            <div className="w-14 h-14 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 mx-auto mb-4">
+          <a
+            key={i}
+            href={c.link}
+            target={c.link.startsWith('http') ? '_blank' : '_self'}
+            rel="noreferrer"
+            className="bg-white rounded-xl shadow-sm hover:shadow-md border border-gray-100 p-6 text-center transition-all block group"
+          >
+            <div className="w-14 h-14 rounded-full bg-emerald-50 group-hover:bg-emerald-100 flex items-center justify-center text-emerald-600 mx-auto mb-4 transition-colors">
               {c.icon}
             </div>
             <h3 className="font-bold text-gray-800 mb-1">{c.title}</h3>
-            <p className="text-gray-700 font-medium">{c.value}</p>
+            <p className="text-gray-800 font-semibold group-hover:text-emerald-700 transition-colors">{c.value}</p>
             <p className="text-sm text-gray-500 mt-1">{c.sub}</p>
-          </div>
+          </a>
         ))}
       </div>
 

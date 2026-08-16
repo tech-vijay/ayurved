@@ -1,8 +1,31 @@
 import { useState, useEffect, useRef } from 'react';
-import { ShoppingCart, Menu, X, Phone, Calendar, Leaf, User as UserIcon, LogOut, Package } from 'lucide-react';
+import { ShoppingCart, Menu, X, Phone, Calendar, Leaf, User as UserIcon, LogOut, Package, MapPin } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useUserAuth } from '@/context/UserAuthContext';
 import { navigate, useHashRoute } from '@/lib/router';
+import logoImg from '@/images/logo.png';
+
+function TickerSequence() {
+  return (
+    <div className="flex items-center shrink-0">
+      <a href="tel:9005937956" className="inline-flex items-center gap-2 text-white hover:text-emerald-300 transition-colors font-medium">
+        <Phone className="w-3.5 h-3.5 text-emerald-400" />
+        <span className="font-semibold tracking-wide">9005937956</span>
+      </a>
+      <span className="mx-6 sm:mx-8 text-emerald-600/80 font-bold">•</span>
+      <span className="inline-flex items-center gap-2 text-emerald-100 font-medium">
+        <MapPin className="w-3.5 h-3.5 text-emerald-400" />
+        <span>सिकरीगंज, गोरखपुर</span>
+      </span>
+      <span className="mx-6 sm:mx-8 text-emerald-600/80 font-bold">•</span>
+      <span className="inline-flex items-center gap-2 text-emerald-100 font-medium">
+        <Leaf className="w-3.5 h-3.5 text-emerald-400" />
+        <span>आयुर्वेद अपनाएँ, स्वस्थ जीवन पाएँ</span>
+      </span>
+      <span className="mx-6 sm:mx-8 text-emerald-600/80 font-bold">•</span>
+    </div>
+  );
+}
 
 export default function Header() {
   const { totalItems } = useCart();
@@ -57,30 +80,24 @@ export default function Header() {
 
   return (
     <>
-      <div className="bg-emerald-900 text-emerald-50 text-sm py-2 px-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-2">
-          <span className="flex items-center gap-2">
-            <Phone className="w-3.5 h-3.5" />
-            <span>+91 98765 43210</span>
-          </span>
-          <span className="hidden sm:flex items-center gap-2 text-emerald-200">
-            <Leaf className="w-3.5 h-3.5" />
-            शुद्ध आयुर्वेदिक औषधियां • विश्वसनीय सेवा
-          </span>
+      <div className="w-full overflow-hidden bg-emerald-950 text-emerald-100 text-xs sm:text-sm py-2 border-b border-emerald-900/60 shadow-inner select-none">
+        <div className="animate-ticker flex whitespace-nowrap">
+          <TickerSequence />
+          <TickerSequence />
+          <TickerSequence />
+          <TickerSequence />
         </div>
       </div>
 
       <header className={`sticky top-0 z-50 bg-white transition-all duration-300 ${scrolled ? 'shadow-lg' : 'shadow-sm'}`}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-16 md:h-20">
-            <button onClick={() => go('/')} className="flex items-center gap-3 group">
-              <div className="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-                <Leaf className="w-6 h-6 text-white" />
-              </div>
-              <div className="text-left">
-                <h1 className="text-lg md:text-xl font-bold text-emerald-800 leading-tight">जय भारत बुद्ध वैदिकी</h1>
-                <p className="text-xs text-gray-500 hidden sm:block">प्रामाणिक आयुर्वेदिक उपचार केंद्र</p>
-              </div>
+            <button onClick={() => go('/')} className="flex items-center gap-2 group shrink-0 focus:outline-none" aria-label="जय भारत बुद्ध वैदिकी होम">
+              <img
+                src={logoImg}
+                alt="जय भारत बुद्ध वैदिकी"
+                className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto max-w-[180px] sm:max-w-[240px] md:max-w-none object-contain transition-transform group-hover:scale-105"
+              />
             </button>
 
             <nav className="hidden md:flex items-center gap-1">

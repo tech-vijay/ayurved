@@ -1,8 +1,9 @@
 import { ReactNode, useState } from 'react';
-import { LayoutDashboard, Package, Tags, Calendar, ShoppingCart, LogOut, Menu, X, Leaf, Home } from 'lucide-react';
+import { LayoutDashboard, Package, Tags, Calendar, ShoppingCart, LogOut, Menu, X, Home } from 'lucide-react';
 import { useAdminAuth } from '@/context/AdminAuthContext';
 import { navigate, useHashRoute, parseRoute } from '@/lib/router';
 import { showToast } from '@/components/Toast';
+import logoImg from '@/images/logo.png';
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const { signOut } = useAdminAuth();
@@ -31,16 +32,15 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
       <aside className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:sticky top-0 left-0 h-screen w-64 bg-emerald-900 text-emerald-50 z-50 transition-transform flex flex-col`}>
-        <div className="p-5 border-b border-emerald-800">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center">
-              <Leaf className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <h2 className="font-bold text-sm">जय भारत बुद्ध वैदिकी</h2>
-              <p className="text-xs text-emerald-300">व्यवस्थापक पैनल</p>
-            </div>
+        <div className="p-4 border-b border-emerald-800">
+          <div className="bg-white p-2.5 rounded-xl shadow-sm border border-emerald-700/20 mb-1.5 inline-block cursor-pointer" onClick={() => navigate('/')}>
+            <img
+              src={logoImg}
+              alt="जय भारत बुद्ध वैदिकी"
+              className="h-10 w-auto object-contain"
+            />
           </div>
+          <p className="text-xs text-emerald-300 font-medium pl-1">व्यवस्थापक पैनल</p>
         </div>
 
         <nav className="flex-1 p-3 space-y-1">

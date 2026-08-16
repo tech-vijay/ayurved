@@ -6,8 +6,8 @@ interface UserAuthContextType {
   session: Session | null;
   user: User | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: string | null }>;
-  signUp: (email: string, password: string, name: string) => Promise<{ error: string | null }>;
+  signIn: (email: string, password: string) => Promise<{ error: string | null; session: Session | null }>;
+  signUp: (email: string, password: string, name: string) => Promise<{ error: string | null; session: Session | null; user: User | null }>;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -32,17 +32,23 @@ export function UserAuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return { error: error?.message ?? null };
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) return { error: error.message, session: null };
+    setSession(data.session);
+    return { error: null, session: data.session };
   };
 
   const signUp = async (email: string, password: string, name: string) => {
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: { data: { name } },
     });
-    return { error: error?.message ?? null };
+    if (error) return { error: error.message, session: null, user: null };
+    if (data.session) {
+      setSession(data.session);
+    }
+    return { error: null, session: data.session, user: data.user };
   };
 
   const signInWithGoogle = async () => {
@@ -54,6 +60,7 @@ export function UserAuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    setSession(null);
   };
 
   return (
