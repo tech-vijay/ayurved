@@ -5,6 +5,10 @@ A high-performance, full-featured web application built for an Ayurvedic healthc
 
 **Project Live Link:** (https://jaibharat-buddha-ayurved.vercel.app/)
 
+**for Admin Pannel**
+**email** : admin@ayurved.com
+**password** : admin123
+
 
 ---
 
